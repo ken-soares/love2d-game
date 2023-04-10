@@ -16,8 +16,8 @@ function love.load()
     end
 
     _G.player                   = {}
-    player.x                    = 100
-    player.y                    = 270
+    player.x                    = 1000
+    player.y                    = 1780
     _G.cam                      = camera:new()
     --player.img = love.graphics.newImage("res/character.png")
     player.spriteSheet          = love.graphics.newImage("res/hero.png")
@@ -69,8 +69,23 @@ function love.keypressed(key, scancode, isrepeat)
 end
 
 local function drawMap()
+    local offset = #Map[1]
+    local draw_left = 0
+    local draw_right = 0
+    if math.floor((player.x + offset) / 16) < #Map then
+        draw_right = math.floor((player.x + offset) / 16)
+    else
+        draw_right = #Map
+    end
+
+    if math.floor((player.x - offset) / 16) > 1 then
+        draw_left = math.floor((player.x - offset) / 16)
+    else
+        draw_left = 1
+    end
+
     for line = 1, #Map do
-        for col = 1, #Map[1] do
+        for col = draw_left, draw_right do
             if Map[line][col] ~= 0 then
                 love.graphics.draw(blockList[Map[line][col]], (col - 1) * 16, (line - 1) * 16)
             end
@@ -79,8 +94,10 @@ local function drawMap()
 end
 
 function love.draw()
-    love.graphics.print("player.x" .. player.x, 50, 100, 0, 1.2)
-    love.graphics.print("player.y" .. player.y, 50, 80, 0, 1.2)
+    print(math.floor(#Map / 16), math.floor(player.x / 16))
+    love.graphics.print("Current FPS: " .. tostring(love.timer.getFPS()), 10, 10, 0, 1.2)
+    love.graphics.print("player.x" .. player.x, 10, 30, 0, 1.2)
+    love.graphics.print("player.y" .. player.y, 10, 50, 0, 1.2)
     cam:attach()
 
     if player.left and player.moving then
