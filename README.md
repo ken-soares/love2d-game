@@ -1,6 +1,13 @@
 # Löve2D game project
 
-map are store at:
+Little survival game project, currently at an early stage of development.
 
-- %appdata% on Windows
-- ~/.local/share/love/love2d_game/ on Linux
+expected features:
+* [ ] building
+* [ ] farming
+* [ ] caves?
+
+the map file is stored at:
+
+* %appdata% on Windows
+* ~/.local/share/love/love2d_game/ on Linux
