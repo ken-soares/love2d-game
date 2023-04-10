@@ -68,28 +68,32 @@ function love.keypressed(key, scancode, isrepeat)
     end
 end
 
+local function drawMap()
+    for line = 1, #Map do
+        for col = 1, #Map[1] do
+            if Map[line][col] ~= 0 then
+                love.graphics.draw(blockList[Map[line][col]], (col - 1) * 16, (line - 1) * 16)
+            end
+        end
+    end
+end
+
 function love.draw()
-    cam:attach()
     love.graphics.print("player.x" .. player.x, 50, 100, 0, 1.2)
     love.graphics.print("player.y" .. player.y, 50, 80, 0, 1.2)
-    love.graphics.scale(2, 2)
+    cam:attach()
 
-    --    for line = 1, #Map do
-    --        for col = 1, #Map[1] do
-    --            if Map[line][col] ~= 0 then
-    --                love.graphics.draw(blockList[Map[line][col]], (col - 1) * 16, (line - 1) * 16)
-    --            end
-    --        end
-    --    end
-    --love.graphics.draw(player.img, player.x, player.y, 0, 2, 2)
     if player.left and player.moving then
-        player.animations.walkLeft:draw(player.spriteSheet, player.x, player.y, nil, 2, 2, 32, 64)
+        player.animations.walkLeft:draw(player.spriteSheet, player.x, player.y, nil, 4, 4, 8, 8)
     elseif player.left and not player.moving then
-        player.animations.idleLeft:draw(player.spriteSheet, player.x, player.y, nil, 2, 2, 32, 64)
+        player.animations.idleLeft:draw(player.spriteSheet, player.x, player.y, nil, 4, 4, 8, 8)
     elseif not player.left and player.moving then
-        player.animations.walkRight:draw(player.spriteSheet, player.x, player.y, nil, 2, 2, 32, 64)
+        player.animations.walkRight:draw(player.spriteSheet, player.x, player.y, nil, 4, 4, 8, 8)
     else
-        player.animations.idleRight:draw(player.spriteSheet, player.x, player.y, nil, 2, 2, 32, 64)
+        player.animations.idleRight:draw(player.spriteSheet, player.x, player.y, nil, 4, 4, 8, 8)
     end
+
+    love.graphics.scale(2, 2)
+    cam:draw(drawMap)
     cam:detach()
 end
