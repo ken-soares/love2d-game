@@ -1,0 +1,45 @@
+local blocklist = require("src.blockList")
+local debug = require("src.lib.debug")
+
+local mapGen = {}
+local map = {}
+
+
+local function generateNoiseGrid()
+    -- Fill each tile in our grid with noise.
+    local grid = {}
+    local baseX = 1000000 * love.math.random()
+    local baseY = 1000000 * love.math.random()
+    for y = 1, 54 do
+        table.insert(grid, {})
+        for x = 1, 75 do
+            table.insert(grid[y], love.math.noise(baseX + .005 * x, baseY + .01 * y))
+        end
+    end
+    return grid
+end
+
+local function GenerateMap(bl)
+    local grid = generateNoiseGrid()
+    local m = {}
+    for y = 1, #grid do
+        table.insert(m, {})
+        for x = 1, #grid[1] do
+            if grid[y][x] < 0.2 then
+                table.insert(m[y], #bl) -- water is the last tile of bl
+            else
+                table.insert(m[y], love.math.random(1, (#bl - 1)))
+            end
+        end
+    end
+    return m
+end
+
+function mapGen.WriteMapToFile()
+    map = GenerateMap(blocklist)
+    love.filesystem.write("level.lua", "local leveldata = " .. debug.dump(map))
+    love.filesystem.append("level.lua", "\nreturn leveldata")
+    print("map created")
+end
+
+return mapGen
